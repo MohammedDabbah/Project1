@@ -1,8 +1,27 @@
 {
   "dependencies": {
     "body-parser": "^1.20.1",
+    "ejs": "^3.1.8",
     "express": "^4.18.2",
-    "mongoose": "^6.8.0",
+    "jsdom": "^21.0.0",
+    "mongoose": "^6.8.3",
     "nodemon": "^2.0.20"
-  }
+  },
+  "name": "hospital-managment-system",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MohammedDabbah/Project1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MohammedDabbah/Project1/issues"
+  },
+  "homepage": "https://github.com/MohammedDabbah/Project1#readme",
+  "description": ""
 }
