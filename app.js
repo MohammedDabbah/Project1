@@ -33,6 +33,10 @@ app.get("/signupPatient",function(req,res){
     res.render("signupPatient");
 });
 
+app.get("/login",function(req,res){
+    res.render("login");
+});
+
 app.post("/signupDoctor",async  function(req,res){
     const data={
         name:req.body.name,
@@ -83,6 +87,20 @@ app.post("/signupNurse",async  function(req,res){
             res.render("home");
         } else{
             res.send("Passwords unmatch!.");
+        }
+    });
+
+    app.post("/login",async function(req,res){
+        try{
+            const check= await signupDoctor.signUpDoctor.findOne({username:req.body.userName})
+            if(check.password===req.body.password){
+                res.render("home");
+            }else{
+                res.send("wrong password");
+            }
+        }
+        catch{
+            res.send("wrong detials");
         }
     });
 
