@@ -40,53 +40,65 @@ app.get("/login",function(req,res){
 app.post("/signupDoctor",async  function(req,res){
     const data={
         name:req.body.name,
-        id:req.body.id,
+        _id:req.body.id,
         birth:req.body.birthBox,
         gender:req.body.flexRadioDefault,
         username:req.body.userName,
         password:req.body.password,
-        confirmPassword:req.body.confirmPassword
+        confirmPassword:req.body.confirmPassword,
+        code:req.body.code
     }
-    if(data.password===data.confirmPassword){
+    if(data.password!=data.confirmPassword){
+        res.send("Passwords unmatch!.");
+    } else if(data.code!="6578"){
+        res.send("invalid code!");
+    } 
+    else{
         await signupDoctor.signUpDoctor.insertMany([data]);
         res.render("home");
-    } else{
-        res.send("Passwords unmatch!.");
     }
 });
 app.post("/signupNurse",async  function(req,res){
     const data={
         name:req.body.name,
-        id:req.body.id,
+        _id:req.body.id,
         birth:req.body.birthBox,
         gender:req.body.flexRadioDefault,
         username:req.body.userName,
         password:req.body.password,
-        confirmPassword:req.body.confirmPassword
+        confirmPassword:req.body.confirmPassword,
+        code:req.body.code
     }
 
-    if(data.password===data.confirmPassword){
-        await signupPatient.signupPatient.insertMany([data]);
-        res.render("home");
-    } else{
+    if(data.password!=data.confirmPassword){
         res.send("Passwords unmatch!.");
+    } else if(data.code!="8756"){
+        res.send("invalid code!");
+    } 
+    else{
+        await signupNurse.signupNurse.insertMany([data]);
+        res.render("home");
     }
 });
     app.post("/signupPatient",async  function(req,res){
         const data={
             name:req.body.name,
-            id:req.body.id,
+            _id:req.body.id,
             birth:req.body.birthBox,
             gender:req.body.flexRadioDefault,
             username:req.body.userName,
             password:req.body.password,
-            confirmPassword:req.body.confirmPassword
+            confirmPassword:req.body.confirmPassword,
+            code:req.body.code
         } 
-         if(data.password===data.confirmPassword){
+        if(data.password!=data.confirmPassword){
+            res.send("Passwords unmatch!.");
+        } else if(data.code!="9856"){
+            res.send("invalid code!");
+        } 
+        else{
             await signupPatient.signupPatient.insertMany([data]);
             res.render("home");
-        } else{
-            res.send("Passwords unmatch!.");
         }
     });
 

@@ -1,6 +1,6 @@
 const mongoose =require("mongoose");
 mongoose.set('strictQuery', false);
-mongoose.connect("mongodb://localhost:27017/HospitalSystem")
+mongoose.connect("mongodb+srv://m7mddacca:m7md123@cluster0.4hynvpk.mongodb.net/test")
 .then(function(){
     console.log("mongodb connected")
 })
@@ -35,6 +35,10 @@ const SignupDoctorSchema=new mongoose.Schema({
     confirmPassword:{
         type:String,
         require:true
+    },
+    code:{
+        type:String,
+        require:true
     }
 });
 
@@ -65,6 +69,10 @@ const SignupNurserSchema=new mongoose.Schema({
     confirmPassword:{
         type:String,
         require:true
+    },
+    code:{
+        type:String,
+        require:true
     }
 });
 const SignupPatientSchema=new mongoose.Schema({
@@ -92,6 +100,10 @@ const SignupPatientSchema=new mongoose.Schema({
         required:true
     },
     confirmPassword:{
+        type:String,
+        require:true
+    },
+    code:{
         type:String,
         require:true
     }
