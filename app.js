@@ -123,58 +123,37 @@ app.post("/signupNurse",async  function(req,res){
         res.render("forgetpassword");
     })
 
-app.post("/forgetpassword", function(req, res) {
+app.post("/forgetpassword", async function(req, res) {
     if (req.body.code === "6578") {
-        signupDoctor.signUpDoctor.findOne({ username: req.body.userName }, function(err,user) {
-            if(!err){
-                res.send("invalid username");
-            }else{
-                user.password = req.body.password;
-                user.confirmPassword=req.body.password;
-                user.save(function(err){
-                    if(err){
-                        res.send("Error updating password");
-                    }else{
-                        res.render("login");
-                    }
-                });
-            }
-        });
-        }else if(req.body.code === "8756"){
-            signupPatient.signupPatient.findOne({username:req.body.userName},function(err,user){
-                if(!err){
-                    res.send("invalid username");
-                }else{
-                    user.password = req.body.password;
-                    user.confirmPassword=req.body.password;
-                    user.save(function(err){
-                        if(err){
-                            res.send("Error updating password");
-                        }else{
-                            res.render("login");
-                        }
-                    })
-                }
-            });
-        } else if(req.body.code === "9856"){
-            signupPatient.signupPatient.findOne({username:req.body.userName},function(err,user){
-                if(!err){
-                    res.send("invalid username");
-                }else{
-                    user.password = req.body.password;
-                    user.confirmPassword=req.body.password;
-                    user.save(function(err){
-                        if(err){
-                            res.send("Error updating password");
-                        }else{
-                            res.render("login");
-                        }
-                    })
-                }
-            });
+        const user = await signupDoctor.signUpDoctor.findOne({username:req.body.userName});
+        if (user){
+            user.password=req.body.password;
+            user.save();
+            res.render("login");
         }else{
-            res.send("wrong validation code !");
+            res.send("invalid username");
         }
+    }else if(req.body.code === "8756"){
+        const user = await signupNurse.signupNurse.findOne({username:req.body.userName});
+        if (user){
+            user.password=req.body.password;
+            user.save();
+            res.render("login");
+        }else{
+            res.send("invalid username");
+        }
+    }else if(req.body.code === "9856"){
+        const user = await signupPatient.signupPatient.findOne({username:req.body.userName});
+        if (user){
+            user.password=req.body.password;
+            user.save();
+            res.render("login");
+        }else{
+            res.send("invalid username");
+        }
+    }else{
+        res.send("invaalid user");
+    }
 });
 
 app.listen(3824, function() {
