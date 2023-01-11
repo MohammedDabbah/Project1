@@ -32,6 +32,26 @@
              </div>
              </div>
 </div>
+<div class="row" style="text-align: center;">
+    <%if(Vcode==="6578"||Vcode==="8756"){%>
+    <div class="col-6">
+<ul class="list-group" >
+    <li class="list-group-item " aria-current="true" style="background-color: blueviolet;color:white;">My Patients</li>
+    <% patients.forEach(function(data){%>
+        <li class="list-group-item"> <h6>Name: <%=data.name%> , ID: <%=data._id%></h6></li>
+        <% });%>
+    <%}%>
     
+  </ul>
+    </div>
+    <!-- <div class="col-6">
+        <ul class="list-group">
+            <li class="list-group-item" aria-current="true" style="background-color: blueviolet ; color:white;">An active item</li>
+            <li class="list-group-item">A second item</li>
+            <li class="list-group-item">A third item</li>
+            <li class="list-group-item">A fourth item</li>
+            <li class="list-group-item">And a fifth one</li>
+          </ul>
+            </div> -->
 </body>
 </html>

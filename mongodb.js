@@ -1,6 +1,7 @@
 const mongoose =require("mongoose");
 mongoose.set('strictQuery', false);
 mongoose.connect("mongodb+srv://m7mddacca:m7md123@cluster0.4hynvpk.mongodb.net/test")
+// mongoose.connect("mongodb://localhost:27017/HospitalSystem")
 .then(function(){
     console.log("mongodb connected")
 })
@@ -109,13 +110,34 @@ const SignupPatientSchema=new mongoose.Schema({
     }
 });
 
+const MedicalFileSchema=new mongoose.Schema({
+    _id:{
+        type:Number,
+        required:true
+    },
+    BloodType:{
+        type:String,
+        required:true
+    },
+    NextAppointmentDate:{
+        type:String,
+        required:true
+    },
+    MedicationsAndDosages:{
+        type:String,
+        required:true
+    }
+});
+
 const signupDoctor=new mongoose.model("SignUpDoctor",SignupDoctorSchema);
 const signupNurse=new mongoose.model("SignUpNurse",SignupNurserSchema);
 const signupPatient=new mongoose.model("SignUpPatient",SignupPatientSchema);
+const medicalFile=new mongoose.model("MedicalFile",MedicalFileSchema);
 module.exports={
    signUpDoctor: signupDoctor,
     signupNurse: signupNurse,
-    signupPatient:signupPatient
+    signupPatient:signupPatient,
+    medicalFile:medicalFile
 }
 
 

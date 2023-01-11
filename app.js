@@ -5,10 +5,11 @@ const ejs = require("ejs");
 const signupDoctor=require("./mongodb");
 const signupNurse=require("./mongodb");
 const signupPatient=require("./mongodb");
+const medicalFile=require("./mongodb");
 //  const jsdom=require("jsdom");
 //  const { JSDOM } = jsdom;
 // const templatePath=path.join(__dirname,"../views");
-
+let arr=[];
 const app = express();
 app.use(express.static("public"));
 app.use(express.json());
@@ -104,16 +105,18 @@ app.post("/signupNurse",async  function(req,res){
 
     app.post("/login",async function(req,res){
             let check1,check2,check3;
+            var pateints;
             check1 = await signupDoctor.signUpDoctor.findOne({ username: req.body.userName, password: req.body.password });
             check2 = await signupNurse.signupNurse.findOne({ username: req.body.userName, password: req.body.password });
             check3 = await signupPatient.signupPatient.findOne({ username: req.body.userName, password: req.body.password });
+            patients=await signupPatient.signupPatient.find();
             // If a matching document was found, render the "home" page
             if (check1!=null && check2===null &&check3===null) {
-                res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code});
+                res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,arr:arr});
             }else if(check1===null && check2!=null &&check3===null){
-                res.render("profile",{Pname:check2.name,Usr:check2.username,Pid:check2._id,Bday:check2.birth,Vcode:check2.code});
+                res.render("profile",{Pname:check2.name,Usr:check2.username,Pid:check2._id,Bday:check2.birth,Vcode:check2.code,arr:arr});
             }else if(check1===null && check2===null &&check3!=null){
-                res.render("profile",{Pname:check3.name,Usr:check3.username,Pid:check3._id,Bday:check3.birth,Vcode:check3.code});
+                res.render("profile",{Pname:check3.name,Usr:check3.username,Pid:check3._id,Bday:check3.birth,Vcode:check3.code,arr:arr});
             }else{
                 res.send("Wrong username/password");
             }
