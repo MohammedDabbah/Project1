@@ -33,7 +33,6 @@
              </div>
 </div>
 <div class="row" style="text-align: center;">
-    </div>
     <%if(Vcode==="6578"||Vcode==="8756"){%>
     <div class="col-6 card p-4">
         <table class="table  ">
@@ -43,6 +42,55 @@
       <th scope="col">Name</th>
       <th scope="col">ID</th>
       <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider ">
+    <% patients.forEach(function(data){%>
+    <tr>
+      <th scope="row">1</th>
+      <td><%=data.name%></td>
+      <td><%=data._id%></td>
+      <td>@<%=data.username%></td>
+    </tr>
+    <%});%>
+        </tbody>
+    </table>
+</div>
+<%}%>
+<div class="col-6 card p-4">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID</th>
+            <th scope="col">BloodType</th>
+            <th scope="col">Appointment</th>
+            <th scope="col">Medication</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <tr>
+            <th scope="row">1</th>
+            <td><input type="text" name="userid" placeholder="User ID" autocomplete="off"></td>
+            <td><input type="text" name="bloodtype" placeholder="Blood Type" autocomplete="off"></td>
+            <td><input class="birth-box" type="date" min="1975-12-15" max="2050-08-26" step="1" required name="appointment"></td>
+            <td><input type="text" name="medication" placeholder="Medication" autocomplete="off"></td>
+          </tr>
+
+        </tbody>
+      </table>
+</div>
+
+<div class="row" style="text-align: center;">
+    <%if(Vcode==="9856"){%>
+    <div class="col-6 card p-4">
+        <table class="table  ">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Blood type</th>
+      <th scope="col">Next appointment</th>
+      <th scope="col">Medication</th>
     </tr>
   </thead>
   <tbody class="table-group-divider ">

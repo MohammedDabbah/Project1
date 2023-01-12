@@ -112,11 +112,11 @@ app.post("/signupNurse",async  function(req,res){
             patients=await signupPatient.signupPatient.find();
             // If a matching document was found, render the "home" page
             if (check1!=null && check2===null &&check3===null) {
-                res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,arr:arr});
+                res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code});
             }else if(check1===null && check2!=null &&check3===null){
-                res.render("profile",{Pname:check2.name,Usr:check2.username,Pid:check2._id,Bday:check2.birth,Vcode:check2.code,arr:arr});
+                res.render("profile",{Pname:check2.name,Usr:check2.username,Pid:check2._id,Bday:check2.birth,Vcode:check2.code});
             }else if(check1===null && check2===null &&check3!=null){
-                res.render("profile",{Pname:check3.name,Usr:check3.username,Pid:check3._id,Bday:check3.birth,Vcode:check3.code,arr:arr});
+                res.render("profile",{Pname:check3.name,Usr:check3.username,Pid:check3._id,Bday:check3.birth,Vcode:check3.code});
             }else{
                 res.send("Wrong username/password");
             }
