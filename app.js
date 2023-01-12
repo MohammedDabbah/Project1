@@ -9,7 +9,7 @@ const medicalFile=require("./mongodb");
 //  const jsdom=require("jsdom");
 //  const { JSDOM } = jsdom;
 // const templatePath=path.join(__dirname,"../views");
-let arr=[];
+var arr=[];
 const app = express();
 app.use(express.static("public"));
 app.use(express.json());
@@ -102,25 +102,50 @@ app.post("/signupNurse",async  function(req,res){
             res.render("home");
         }
     });
-
-    app.post("/login",async function(req,res){
+    
+    app.get("/profile",async function(req,res){
             let check1,check2,check3;
             var pateints;
-            check1 = await signupDoctor.signUpDoctor.findOne({ username: req.body.userName, password: req.body.password });
-            check2 = await signupNurse.signupNurse.findOne({ username: req.body.userName, password: req.body.password });
-            check3 = await signupPatient.signupPatient.findOne({ username: req.body.userName, password: req.body.password });
+            let Num=1;
+            check1 = await signupDoctor.signUpDoctor.findOne({ username:arr[0], password: arr[1]});
+            check2 = await signupNurse.signupNurse.findOne({ username: arr[0], password: arr[1]});
+            check3 = await signupPatient.signupPatient.findOne({ username: arr[0], password: arr[1] });
             patients=await signupPatient.signupPatient.find();
             // If a matching document was found, render the "home" page
             if (check1!=null && check2===null &&check3===null) {
-                res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code});
+                res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,Num:Num});
             }else if(check1===null && check2!=null &&check3===null){
-                res.render("profile",{Pname:check2.name,Usr:check2.username,Pid:check2._id,Bday:check2.birth,Vcode:check2.code});
+                res.render("profile",{Pname:check2.name,Usr:check2.username,Pid:check2._id,Bday:check2.birth,Vcode:check2.code,Num:Num});
             }else if(check1===null && check2===null &&check3!=null){
-                res.render("profile",{Pname:check3.name,Usr:check3.username,Pid:check3._id,Bday:check3.birth,Vcode:check3.code});
+                filesM=await medicalFile.medicalFile.find({id:check3._id});
+                res.render("profile",{Pname:check3.name,Usr:check3.username,Pid:check3._id,Bday:check3.birth,Vcode:check3.code,Num:Num});
+                console.log(filesM);
             }else{
                 res.send("Wrong username/password");
+                console.log(arr);
             }
 });
+
+app.post("/login",function(req,res){
+    arr=[];
+    arr.push(req.body.userName);
+    arr.push(req.body.password);
+    console.log(arr[0]);
+    console.log(arr[1]);
+    res.redirect("/profile")
+})
+
+app.post("/",async function(req,res){
+    const data={
+        id:req.body.userid,
+        DiseaseDiagnosis:req.body.DiseaseDiagnosis,
+        NextAppointmentDate:req.body.appointment,
+        MedicationsAndDosages:req.body.medication
+    }
+    await medicalFile.medicalFile.insertMany([data]);
+    res.redirect("/profile");
+
+})
 
     app.get("/forgetpassword",function(req,res){
         res.render("forgetpassword");

@@ -111,11 +111,11 @@ const SignupPatientSchema=new mongoose.Schema({
 });
 
 const MedicalFileSchema=new mongoose.Schema({
-    _id:{
+    id:{
         type:Number,
         required:true
     },
-    BloodType:{
+    DiseaseDiagnosis:{
         type:String,
         required:true
     },

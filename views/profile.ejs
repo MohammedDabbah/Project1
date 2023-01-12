@@ -14,7 +14,7 @@
     <div class="card p-4"> 
         <div class=" image d-flex flex-column justify-content-center align-items-center"> 
             <button class="btn btn-secondary"> 
-                <img  class="image"src="https://pbs.twimg.com/profile_images/1483123424876707841/SfY63dVD_400x400.jpg" height="100" width="100" />
+                <img  class="image"src="/images/Unknown.png" height="100" width="100" />
             </button> <span class="name mt-3"><%=Pname%></span> 
             <span class="idd">@<%=Usr%></span> 
             <div class="d-flex flex-row justify-content-center align-items-center gap-2"> 
@@ -34,11 +34,11 @@
 </div>
 <div class="row" style="text-align: center;">
     <%if(Vcode==="6578"||Vcode==="8756"){%>
-    <div class="col-6 card p-4">
+    <div class="col-6">
         <table class="table  ">
   <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col">#Patients</th>
       <th scope="col">Name</th>
       <th scope="col">ID</th>
       <th scope="col">Handle</th>
@@ -47,7 +47,7 @@
   <tbody class="table-group-divider ">
     <% patients.forEach(function(data){%>
     <tr>
-      <th scope="row">1</th>
+      <th scope="row"><%=Num++;%></th>
       <td><%=data.name%></td>
       <td><%=data._id%></td>
       <td>@<%=data.username%></td>
@@ -56,50 +56,53 @@
         </tbody>
     </table>
 </div>
-<%}%>
-<div class="col-6 card p-4">
+<div class="col-6">
     <table class="table">
         <thead>
           <tr>
-            <th scope="col">#</th>
+            <th scope="col">#Input data</th>
             <th scope="col">ID</th>
-            <th scope="col">BloodType</th>
+            <th scope="col">DiseaseDiagnosis</th>
             <th scope="col">Appointment</th>
             <th scope="col">Medication</th>
           </tr>
         </thead>
         <tbody class="table-group-divider">
           <tr>
-            <th scope="row">1</th>
+            <th scope="row"></th>
+            <form action="/" method="post">
             <td><input type="text" name="userid" placeholder="User ID" autocomplete="off"></td>
-            <td><input type="text" name="bloodtype" placeholder="Blood Type" autocomplete="off"></td>
+            <td><input type="text" name="DiseaseDiagnosis" placeholder="Disease" autocomplete="off"></td>
             <td><input class="birth-box" type="date" min="1975-12-15" max="2050-08-26" step="1" required name="appointment"></td>
             <td><input type="text" name="medication" placeholder="Medication" autocomplete="off"></td>
           </tr>
-
         </tbody>
       </table>
+      <td><input type="submit" value="submit"></td>
+          </form>
+</div>
+<%}%>
 </div>
 
 <div class="row" style="text-align: center;">
     <%if(Vcode==="9856"){%>
-    <div class="col-6 card p-4">
+    <div class="col-12">
         <table class="table  ">
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Blood type</th>
+      <th scope="col">Disease diagnosis</th>
       <th scope="col">Next appointment</th>
       <th scope="col">Medication</th>
     </tr>
   </thead>
   <tbody class="table-group-divider ">
-    <% patients.forEach(function(data){%>
+   <%filesM.forEach(function(data){%>
     <tr>
-      <th scope="row">1</th>
-      <td><%=data.name%></td>
-      <td><%=data._id%></td>
-      <td>@<%=data.username%></td>
+      <th scope="row"><%=Num++;%></th>
+      <td><%=data.DiseaseDiagnosis%></td>
+      <td><%=data.NextAppointmentDate%></td>
+      <td><%=data.MedicationsAndDosages%></td>
     </tr>
     <%});%>
         </tbody>
