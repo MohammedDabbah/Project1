@@ -54,7 +54,6 @@ app.post("/signupDoctor",async  function(req,res){
         confirmPassword:req.body.confirmPassword,
         code:req.body.code
     }
-    deepEqual(data.password,data.confirmPassword,res.send("Passwords unmatch!."))
     if(data.password!=data.confirmPassword){
         res.send("Passwords unmatch!.");
     } else if(data.code!="6578"){
