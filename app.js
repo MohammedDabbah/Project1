@@ -1,15 +1,16 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+const assert = require('assert');
 // const path=require("path");
-const signupDoctor=require("./mongodb");
-const signupNurse=require("./mongodb");
-const signupPatient=require("./mongodb");
+const signUp=require("./mongodb");
 const medicalFile=require("./mongodb");
+// const { deepEqual } = require("assert");
 //  const jsdom=require("jsdom");
 //  const { JSDOM } = jsdom;
 // const templatePath=path.join(__dirname,"../views");
 var arr=[];
+let check1;
 const app = express();
 app.use(express.static("public"));
 app.use(express.json());
@@ -39,6 +40,10 @@ app.get("/login",function(req,res){
 });
 
 app.post("/signupDoctor",async  function(req,res){
+    check1=await signUp.signUp.findOne({username:req.body.userName});
+    if(check1){
+        res.send("this username are used");
+    }else{
     const data={
         name:req.body.name,
         _id:req.body.id,
@@ -49,17 +54,23 @@ app.post("/signupDoctor",async  function(req,res){
         confirmPassword:req.body.confirmPassword,
         code:req.body.code
     }
+    deepEqual(data.password,data.confirmPassword,res.send("Passwords unmatch!."))
     if(data.password!=data.confirmPassword){
         res.send("Passwords unmatch!.");
     } else if(data.code!="6578"){
         res.send("invalid code!");
     } 
     else{
-        await signupDoctor.signUpDoctor.insertMany([data]);
+        await signUp.signUp.insertMany([data]);
         res.render("home");
     }
+}
 });
 app.post("/signupNurse",async  function(req,res){
+    check1=await signUp.signUp.findOne({username:req.body.userName});
+    if(check1){
+        res.send("this username are used");
+    }else{
     const data={
         name:req.body.name,
         _id:req.body.id,
@@ -77,11 +88,16 @@ app.post("/signupNurse",async  function(req,res){
         res.send("invalid code!");
     } 
     else{
-        await signupNurse.signupNurse.insertMany([data]);
+        await signUp.signUp.insertMany([data]);
         res.render("home");
     }
+}
 });
     app.post("/signupPatient",async  function(req,res){
+        check1=await signUp.signUp.findOne({username:req.body.userName});
+        if(check1){
+            res.send("this username are used");
+        }else{
         const data={
             name:req.body.name,
             _id:req.body.id,
@@ -98,28 +114,21 @@ app.post("/signupNurse",async  function(req,res){
             res.send("invalid code!");
         } 
         else{
-            await signupPatient.signupPatient.insertMany([data]);
+            await signUp.signUp.insertMany([data]);
             res.render("home");
         }
-    });
+    }
+});
     
     app.get("/profile",async function(req,res){
-            let check1,check2,check3;
+            let check1;
             var pateints;
             let Num=1;
-            check1 = await signupDoctor.signUpDoctor.findOne({ username:arr[0], password: arr[1]});
-            check2 = await signupNurse.signupNurse.findOne({ username: arr[0], password: arr[1]});
-            check3 = await signupPatient.signupPatient.findOne({ username: arr[0], password: arr[1] });
-            patients=await signupPatient.signupPatient.find();
+            check1 = await signUp.signUp.findOne({ username:arr[0], password: arr[1]});
+            patients=await signUp.signUp.find({code:"9856"});
             // If a matching document was found, render the "home" page
-            if (check1!=null && check2===null &&check3===null) {
+            if (check1) {
                 res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,Num:Num});
-            }else if(check1===null && check2!=null &&check3===null){
-                res.render("profile",{Pname:check2.name,Usr:check2.username,Pid:check2._id,Bday:check2.birth,Vcode:check2.code,Num:Num});
-            }else if(check1===null && check2===null &&check3!=null){
-                filesM=await medicalFile.medicalFile.find({id:check3._id});
-                res.render("profile",{Pname:check3.name,Usr:check3.username,Pid:check3._id,Bday:check3.birth,Vcode:check3.code,Num:Num});
-                console.log(filesM);
             }else{
                 res.send("Wrong username/password");
                 console.log(arr);
@@ -153,7 +162,7 @@ app.post("/",async function(req,res){
 
 app.post("/forgetpassword", async function(req, res) {
     if (req.body.code === "6578") {
-        const user = await signupDoctor.signUpDoctor.findOne({username:req.body.userName});
+        const user = await signUp.signUp.findOne({username:req.body.userName});
         if (user){
             user.password=req.body.password;
             user.save();
@@ -162,7 +171,7 @@ app.post("/forgetpassword", async function(req, res) {
             res.send("invalid username");
         }
     }else if(req.body.code === "8756"){
-        const user = await signupNurse.signupNurse.findOne({username:req.body.userName});
+        const user = await signUp.signUp.findOne({username:req.body.userName});
         if (user){
             user.password=req.body.password;
             user.save();
@@ -171,7 +180,7 @@ app.post("/forgetpassword", async function(req, res) {
             res.send("invalid username");
         }
     }else if(req.body.code === "9856"){
-        const user = await signupPatient.signupPatient.findOne({username:req.body.userName});
+        const user = await signUp.signUp.findOne({username:req.body.userName});
         if (user){
             user.password=req.body.password;
             user.save();
@@ -182,6 +191,43 @@ app.post("/forgetpassword", async function(req, res) {
     }else{
         res.send("invaalid user");
     }
+});
+app.get("/changepassword",function(req,res){
+    res.render("changepassword");
+});
+
+app.post("/changepassword", async function(req,res){
+    check1 = await signUp.signUp.findOne({username:req.body.userName, password:req.body.currentPassword});
+    if(check1){
+         check1.password=req.body.newPassword;
+         check1.confirmPassword=req.body.newPassword;
+         check1.save();
+        console.log(check1);
+        res.render("login");
+    }else{
+        res.send("Wrong username/passwoed");
+    }
+});
+
+app.get("/changeusername",function(req,res){
+    res.render("changeusername");
+});
+
+app.post("/changeusername",async function(req,res){
+    check1=await signUp.signUp.findOne({_id:req.body.userId,code:req.body.code,password:req.body.password});
+    let check2= await signUp.signUp.findOne({username:req.body.newUsername});
+    if(check1){
+        if(!check2){
+            check1.username=req.body.newUsername;
+            check1.save();
+            res.render("login");
+        }else{
+            res.send("this username are used");
+        }
+    }else{
+        res.send("some information are wrong");
+    }
+
 });
 
 app.listen(3824, function() {

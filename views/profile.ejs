@@ -14,7 +14,7 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Logout</a>
+          <a class="navbar-brand" href="/">Logout</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -23,16 +23,19 @@
               <li class="nav-item">
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Account Settings & Security
+                        Account Settings
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Change username</a></li>
-                      <li><a class="dropdown-item" href="#">Change password</a></li>
+                      <li><a class="dropdown-item" href="changeusername">Change username</a></li>
+                      <li><a class="dropdown-item" href="changepassword">Change password</a></li>
                     </ul>
                   </div>                
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Message Center</a>
+                <a class="nav-link" href="#schedule">Schedule Working</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href = "mailto:Hospital@gmail.com"> message center</a>
               </li>
             </ul>
           </div>
@@ -62,7 +65,7 @@
 </div>
 <div class="row" style="text-align: center;">
     <%if(Vcode==="6578"||Vcode==="8756"){%>
-    <div class="col-6">
+    <div class="col-lg-6">
         <table class="table  ">
   <thead>
     <tr>
@@ -84,7 +87,7 @@
         </tbody>
     </table>
 </div>
-<div class="col-6">
+<div class="col-lg-6">
     <table class="table">
         <thead>
           <tr>
@@ -98,7 +101,7 @@
         <tbody class="table-group-divider">
           <tr>
             <th scope="row"></th>
-            <form action="/" method="post">
+            <form action="/" method="post"> 
             <td><input type="text" name="userid" placeholder="User ID" autocomplete="off"></td>
             <td><input type="text" name="DiseaseDiagnosis" placeholder="Disease" autocomplete="off"></td>
             <td><input class="birth-box" type="date" min="1975-12-15" max="2050-08-26" step="1" required name="appointment"></td>
@@ -106,7 +109,7 @@
           </tr>
         </tbody>
       </table>
-      <td><input type="submit" value="submit"></td>
+      <td><input type="submit" value="submit" class="btn btn-outline-primary"></td>
           </form>
 </div>
 <%}%>
@@ -142,7 +145,7 @@
   <div class="timetable-img text-center">
       <img src="img/content/timetable.png" alt="">
   </div>
-  <div class="table-responsive">
+  <div class="table-responsive" id="schedule">
       <table class="table table-bordered text-center">
           <thead>
               <tr class="bg-light-gray">
