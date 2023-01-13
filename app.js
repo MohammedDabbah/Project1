@@ -126,9 +126,13 @@ app.post("/signupNurse",async  function(req,res){
             check1 = await signUp.signUp.findOne({ username:arr[0], password: arr[1]});
             patients=await signUp.signUp.find({code:"9856"});
             // If a matching document was found, render the "home" page
-            if (check1) {
+            if (check1!=null && check1.code!="9856") {
                 res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,Num:Num});
-            }else{
+            }else if(check1.code==="9856"){
+                filesM=await medicalFile.medicalFile.find({id:check1._id})
+                res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,Num:Num});
+            }
+            else{
                 res.send("Wrong username/password");
                 console.log(arr);
             }
