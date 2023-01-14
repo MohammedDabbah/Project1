@@ -61,7 +61,6 @@ app.post("/signupDoctor",async  function(req,res){
     } 
     else{
         await signUp.signUp.insertMany([data]);
-        assert(await signUp.signUp.findOne({username:data.username})!=null,"error in registration");
         res.render("home");
     }
 }
@@ -89,7 +88,6 @@ app.post("/signupNurse",async  function(req,res){
     } 
     else{
         await signUp.signUp.insertMany([data]);
-        assert(await signUp.signUp.findOne({username:data.username})!=null,"error in registration");
         res.render("home");
     }
 }
@@ -116,7 +114,6 @@ app.post("/signupNurse",async  function(req,res){
         } 
         else{
             await signUp.signUp.insertMany([data]);
-            assert(await signUp.signUp.findOne({username:data.username})!=null,"error in registration");
             res.render("home");
         }
     }
@@ -129,13 +126,14 @@ app.post("/signupNurse",async  function(req,res){
             check1 = await signUp.signUp.findOne({ username:arr[0], password: arr[1]});
             patients=await signUp.signUp.find({code:"9856"});
             // If a matching document was found, render the "home" page
-            if (check1!=null && check1.code!="9856") {
-                res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,Num:Num});
-            }else if(check1.code==="9856"){
-                filesM=await medicalFile.medicalFile.find({id:check1._id})
-                res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,Num:Num});
-            }
-            else{
+            if(check1){
+                if(check1.code!="9856"){
+                    res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,Num:Num});
+                }else{
+                    filesM=await medicalFile.medicalFile.find({id:check1._id})
+                    res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,Num:Num}); 
+                }
+            }else{
                 res.send("Wrong username/password");
                 console.log(arr);
             }
@@ -147,8 +145,6 @@ app.post("/login",function(req,res){
     arr.push(req.body.password);
     console.log(arr[0]);
     console.log(arr[1]);
-    assert(arr[0]!=null,"error in getting usermame");
-    assert(arr[1]!=null,"error in getting password");
     res.redirect("/profile")
 })
 
@@ -160,7 +156,6 @@ app.post("/",async function(req,res){
         MedicationsAndDosages:req.body.medication
     }
     await medicalFile.medicalFile.insertMany([data]);
-    assert(await medicalFile.medicalFile.findOne({id:data.id,DiseaseDiagnosis:data.DiseaseDiagnosis,NextAppointmentDate:data.NextAppointmentDate,MedicationsAndDosages:data.MedicationsAndDosages})!=null,"error in insert");
     res.redirect("/profile");
 
 })
@@ -174,8 +169,8 @@ app.post("/forgetpassword", async function(req, res) {
         const user = await signUp.signUp.findOne({username:req.body.userName});
         if (user){
             user.password=req.body.password;
+            user.confirmPassword=user.password;
             user.save();
-            assert(await signUp.signUp.findOne({username:req.body.userName,password:req.body.password})!=null,"falid changing password");
             res.render("login");
         }else{
             res.send("invalid username");
@@ -185,7 +180,6 @@ app.post("/forgetpassword", async function(req, res) {
         if (user){
             user.password=req.body.password;
             user.save();
-            assert(await signUp.signUp.findOne({username:req.body.userName,password:req.body.password})!=null,"falid changing password");
             res.render("login");
         }else{
             res.send("invalid username");
@@ -195,7 +189,6 @@ app.post("/forgetpassword", async function(req, res) {
         if (user){
             user.password=req.body.password;
             user.save();
-            assert(await signUp.signUp.findOne({username:req.body.userName,password:req.body.password})!=null,"falid changing password");
             res.render("login");
         }else{
             res.send("invalid username");
@@ -209,16 +202,18 @@ app.get("/changepassword",function(req,res){
 });
 
 app.post("/changepassword", async function(req,res){
-    check1 = await signUp.signUp.findOne({username:req.body.userName, password:req.body.currentPassword});
-    if(check1){
-         check1.password=req.body.newPassword;
-         check1.confirmPassword=req.body.newPassword;
-         check1.save();
-        console.log(check1);
-        assert(await signUp.signUp.findOne({username:req.body.userName,password:req.body.currentPassword})===null,"falid changing password");
-        res.render("login");
+    if(req.body.currentPassword!=req.body.newPassword){
+        check1 = await signUp.signUp.findOne({username:req.body.userName, password:req.body.currentPassword});
+        if(check1){
+             check1.password=req.body.newPassword;
+             check1.confirmPassword=req.body.newPassword;
+             check1.save();
+             res.render("login");
+        }else{
+            res.send("Wrong username/password");
+        }
     }else{
-        res.send("Wrong username/passwoed");
+        res.send("already have this password");
     }
 });
 
@@ -228,19 +223,23 @@ app.get("/changeusername",function(req,res){
 
 app.post("/changeusername",async function(req,res){
     check1=await signUp.signUp.findOne({_id:req.body.userId,code:req.body.code,password:req.body.password});
-    let check2= await signUp.signUp.findOne({username:req.body.newUsername});
-    if(check1){
-        if(!check2){
-            check1.username=req.body.newUsername;
-            check1.save();
-            assert(await signUp.signUp.findOne({_id:req.body.userId,username:req.body.newUsername})!=null,"falid changing username");
-            res.render("login");
+    if(check1.username!=req.body.newUsername){
+        let check2= await signUp.signUp.findOne({username:req.body.newUsername});
+        if(check1){
+            if(!check2){
+                check1.username=req.body.newUsername;
+                check1.save();
+                res.render("login");
+            }else{
+                res.send("this username are used");
+            }
         }else{
-            res.send("this username are used");
+            res.send("some information are wrong");
         }
     }else{
-        res.send("some information are wrong");
+        res.send("already have this username");
     }
+    
 
 });
 
