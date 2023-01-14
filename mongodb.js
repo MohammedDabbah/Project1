@@ -15,7 +15,7 @@ const SignupSchema=new mongoose.Schema({
         required:true
     },
     _id:{
-        type:Number,
+        type:String,
         required:true
     },
     birth:{
@@ -45,7 +45,7 @@ const SignupSchema=new mongoose.Schema({
 
 const MedicalFileSchema=new mongoose.Schema({
     id:{
-        type:Number,
+        type:String,
         required:true
     },
     DiseaseDiagnosis:{

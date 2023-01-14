@@ -131,6 +131,7 @@ app.post("/signupNurse",async  function(req,res){
                     res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,Num:Num});
                 }else{
                     filesM=await medicalFile.medicalFile.find({id:check1._id})
+                    console.log(filesM);
                     res.render("profile",{Pname:check1.name,Usr:check1.username,Pid:check1._id,Bday:check1.birth,Vcode:check1.code,Num:Num}); 
                 }
             }else{
