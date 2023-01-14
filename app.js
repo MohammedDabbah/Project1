@@ -8,6 +8,7 @@ const medicalFile=require("./mongodb");
 // const { deepEqual } = require("assert");
 //  const jsdom=require("jsdom");
 //  const { JSDOM } = jsdom;
+
 // const templatePath=path.join(__dirname,"../views");
 var arr=[];
 let check1;
