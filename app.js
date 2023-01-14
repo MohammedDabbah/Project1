@@ -89,6 +89,7 @@ app.post("/signupNurse",async  function(req,res){
     } 
     else{
         await signUp.signUp.insertMany([data]);
+        assert(await signUp.signUp.findOne({username:data.username})!=null,"error in registration");
         res.render("home");
     }
 }
@@ -115,6 +116,7 @@ app.post("/signupNurse",async  function(req,res){
         } 
         else{
             await signUp.signUp.insertMany([data]);
+            assert(await signUp.signUp.findOne({username:data.username})!=null,"error in registration");
             res.render("home");
         }
     }
@@ -145,6 +147,8 @@ app.post("/login",function(req,res){
     arr.push(req.body.password);
     console.log(arr[0]);
     console.log(arr[1]);
+    assert(arr[0]!=null,"error in getting usermame");
+    assert(arr[1]!=null,"error in getting password");
     res.redirect("/profile")
 })
 
@@ -156,6 +160,7 @@ app.post("/",async function(req,res){
         MedicationsAndDosages:req.body.medication
     }
     await medicalFile.medicalFile.insertMany([data]);
+    assert(await medicalFile.medicalFile.findOne({id:data.id,DiseaseDiagnosis:data.DiseaseDiagnosis,NextAppointmentDate:data.NextAppointmentDate,MedicationsAndDosages:data.MedicationsAndDosages})!=null,"error in insert");
     res.redirect("/profile");
 
 })
@@ -170,6 +175,7 @@ app.post("/forgetpassword", async function(req, res) {
         if (user){
             user.password=req.body.password;
             user.save();
+            assert(await signUp.signUp.findOne({username:req.body.userName,password:req.body.password})!=null,"falid changing password");
             res.render("login");
         }else{
             res.send("invalid username");
@@ -179,6 +185,7 @@ app.post("/forgetpassword", async function(req, res) {
         if (user){
             user.password=req.body.password;
             user.save();
+            assert(await signUp.signUp.findOne({username:req.body.userName,password:req.body.password})!=null,"falid changing password");
             res.render("login");
         }else{
             res.send("invalid username");
@@ -188,6 +195,7 @@ app.post("/forgetpassword", async function(req, res) {
         if (user){
             user.password=req.body.password;
             user.save();
+            assert(await signUp.signUp.findOne({username:req.body.userName,password:req.body.password})!=null,"falid changing password");
             res.render("login");
         }else{
             res.send("invalid username");
@@ -207,6 +215,7 @@ app.post("/changepassword", async function(req,res){
          check1.confirmPassword=req.body.newPassword;
          check1.save();
         console.log(check1);
+        assert(await signUp.signUp.findOne({username:req.body.userName,password:req.body.currentPassword})===null,"falid changing password");
         res.render("login");
     }else{
         res.send("Wrong username/passwoed");
@@ -224,6 +233,7 @@ app.post("/changeusername",async function(req,res){
         if(!check2){
             check1.username=req.body.newUsername;
             check1.save();
+            assert(await signUp.signUp.findOne({_id:req.body.userId,username:req.body.newUsername})!=null,"falid changing username");
             res.render("login");
         }else{
             res.send("this username are used");
