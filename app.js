@@ -61,6 +61,7 @@ app.post("/signupDoctor",async  function(req,res){
     } 
     else{
         await signUp.signUp.insertMany([data]);
+        assert(await signUp.signUp.findOne({username:data.username})!=null,"error in registration");
         res.render("home");
     }
 }
