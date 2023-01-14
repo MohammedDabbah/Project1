@@ -9,7 +9,6 @@ const medicalFile=require("./mongodb");
 //  const jsdom=require("jsdom");
 //  const { JSDOM } = jsdom;
 // const templatePath=path.join(__dirname,"../views");
-//----
 var arr=[];
 let check1;
 const app = express();
@@ -224,9 +223,9 @@ app.get("/changeusername",function(req,res){
 
 app.post("/changeusername",async function(req,res){
     check1=await signUp.signUp.findOne({_id:req.body.userId,code:req.body.code,password:req.body.password});
-    if(check1.username!=req.body.newUsername){
-        let check2= await signUp.signUp.findOne({username:req.body.newUsername});
         if(check1){
+            if(check1.username!=req.body.newUsername){
+                let check2= await signUp.signUp.findOne({username:req.body.newUsername});
             if(!check2){
                 check1.username=req.body.newUsername;
                 check1.save();

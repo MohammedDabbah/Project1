@@ -15,13 +15,13 @@
     <h2>Change Username</h2>
     <form action="/changeusername" method="post">
       <div class="input-box">
-      <input type="text"  name="userId" placeholder="ID"required autocomplete="off">
+      <input type="text"  name="userId" placeholder="ID"required autocomplete="off" minlength="9">
       </div>
       <div class="input-box">
         <input type="password"  name="code" placeholder="Enter your Validation code"required>
         </div>
       <div class="input-box">
-        <input type="password" name="password" placeholder=" Enter your  password" required>
+        <input type="password" name="password" placeholder=" Enter your  password" required minlength="8">
       </div>
       <div class="input-box">
         <input type="text" name="newUsername" placeholder=" Enter a new username" required autocomplete="off">
